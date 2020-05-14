@@ -14,6 +14,7 @@ const Instrument = styled.div`
     transform: translateX(-50%) translateY(-50%);
     color: #fff;
     padding: 2rem;
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.5);
     .settings {
         display: flex;
         > div {
@@ -53,6 +54,67 @@ const Instrument = styled.div`
 `;
 
 function App() {
+    const [second, setSecond] = React.useState(1);
+    const [third, setThird] = React.useState(1);
+    const [fourth, setFourth] = React.useState(0);
+    const [fifth, setFifth] = React.useState(1);
+    const [sixth, setSixth] = React.useState(1);
+    const [seventh, setSeventh] = React.useState(1);
+
+    const setScale = React.useCallback(
+        (scaleNotes) => {
+            setSecond(scaleNotes[0]);
+            setThird(scaleNotes[1]);
+            setFourth(scaleNotes[2]);
+            setFifth(scaleNotes[3]);
+            setSixth(scaleNotes[4]);
+            setSeventh(scaleNotes[5]);
+        },
+        [setSecond, setThird, setFourth, setFifth, setSixth, setSeventh],
+    );
+
+    const locrian = React.useCallback(() => {
+        setScale([0, 0, 0, 0, 0, 0]);
+    }, [setScale]);
+
+    const phrygian = React.useCallback(() => {
+        setScale([0, 0, 0, 1, 0, 0]);
+    }, [setScale]);
+
+    const aeolian = React.useCallback(() => {
+        setScale([1, 0, 0, 1, 0, 0]);
+    }, [setScale]);
+
+    const dorian = React.useCallback(() => {
+        setScale([1, 0, 0, 1, 1, 0]);
+    }, [setScale]);
+
+    const myxolydian = React.useCallback(() => {
+        setScale([1, 1, 0, 1, 1, 0]);
+    }, [setScale]);
+
+    const ionian = React.useCallback(() => {
+        setScale([1, 1, 0, 1, 1, 1]);
+    }, [setScale]);
+
+    const lydian = React.useCallback(() => {
+        setScale([1, 1, 1, 1, 1, 1]);
+    }, [setScale]);
+
+    const cnote = React.useRef(null);
+    const cshnote = React.useRef(null);
+    const dnote = React.useRef(null);
+    const dshnote = React.useRef(null);
+    const enote = React.useRef(null);
+    const fnote = React.useRef(null);
+    const fshnote = React.useRef(null);
+    const gnote = React.useRef(null);
+    const gshnote = React.useRef(null);
+    const anote = React.useRef(null);
+    const ashnote = React.useRef(null);
+    const bnote = React.useRef(null);
+    const c2note = React.useRef(null);
+
     return (
         <div className="App">
             <header className="App-header"></header>
@@ -77,15 +139,131 @@ function App() {
                 </div>
                 <div className="notes">
                     <div className="note--1">
-                        <Pad notes={[]} />1
+                        <Pad
+                            keys={['a']}
+                            notes={[
+                                {
+                                    url: require('./audio/c.wav'),
+                                    ref: cnote,
+                                },
+                            ]}
+                            value={0}
+                        />
                     </div>
-                    <div className="note--2">2</div>
-                    <div className="note--3">3</div>
-                    <div className="note--4">4</div>
-                    <div className="note--5">5</div>
-                    <div className="note--6">6</div>
-                    <div className="note--7">7</div>
-                    <div className="note--8">8</div>
+                    <div className="note--2">
+                        <Pad
+                            keys={['s']}
+                            notes={[
+                                {
+                                    url: require('./audio/c+.wav'),
+                                    ref: cshnote,
+                                },
+                                {
+                                    url: require('./audio/d.wav'),
+                                    ref: dnote,
+                                },
+                            ]}
+                            value={second}
+                            onChange={setSecond}
+                        />
+                    </div>
+                    <div className="note--3">
+                        <Pad
+                            keys={['d']}
+                            notes={[
+                                {
+                                    url: require('./audio/d+.wav'),
+                                    ref: dshnote,
+                                },
+                                {
+                                    url: require('./audio/e.wav'),
+                                    ref: enote,
+                                },
+                            ]}
+                            value={third}
+                            onChange={setThird}
+                        />
+                    </div>
+                    <div className="note--4">
+                        <Pad
+                            keys={['f']}
+                            notes={[
+                                {
+                                    url: require('./audio/f.wav'),
+                                    ref: fnote,
+                                },
+                                {
+                                    url: require('./audio/f+.wav'),
+                                    ref: fshnote,
+                                },
+                            ]}
+                            value={fourth}
+                            onChange={setFourth}
+                        />
+                    </div>
+                    <div className="note--5">
+                        <Pad
+                            keys={['g']}
+                            notes={[
+                                {
+                                    url: require('./audio/f+.wav'),
+                                    ref: fshnote,
+                                },
+                                {
+                                    url: require('./audio/g.wav'),
+                                    ref: gnote,
+                                },
+                            ]}
+                            value={fifth}
+                            onChange={setFifth}
+                        />
+                    </div>
+                    <div className="note--6">
+                        <Pad
+                            keys={['h']}
+                            notes={[
+                                {
+                                    url: require('./audio/g+.wav'),
+                                    ref: gshnote,
+                                },
+                                {
+                                    url: require('./audio/a.wav'),
+                                    ref: anote,
+                                },
+                            ]}
+                            value={sixth}
+                            onChange={setSixth}
+                        />
+                    </div>
+                    <div className="note--7">
+                        <Pad
+                            keys={['j']}
+                            notes={[
+                                {
+                                    url: require('./audio/a+.wav'),
+                                    ref: ashnote,
+                                },
+                                {
+                                    url: require('./audio/b.wav'),
+                                    ref: bnote,
+                                },
+                            ]}
+                            value={seventh}
+                            onChange={setSeventh}
+                        />
+                    </div>
+                    <div className="note--8">
+                        <Pad
+                            keys={['k']}
+                            notes={[
+                                {
+                                    url: require('./audio/c2.wav'),
+                                    ref: c2note,
+                                },
+                            ]}
+                            value={0}
+                        />
+                    </div>
                 </div>
             </Instrument>
         </div>
