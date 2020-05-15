@@ -6,3 +6,8 @@ body {
     font-family: 'Nunito', monospace;
     font-size: 2rem;
 }
+
+.flex {
+    display: flex;
+    align-items: center;
+}
