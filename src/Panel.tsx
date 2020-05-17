@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import panel from './img/panel.png';
 import knob from './img/knob.png';
 import knobHover from './img/knob-hover.png';
-// import { useSelect } from 'downshift';
 import { Scale } from './App';
 
 interface Props {
@@ -82,7 +81,7 @@ const Panel = ({ scale, scales, setScale }: Props) => {
             setScale(scales[i + 1]);
         }
         console.log({ i });
-    }, [scale, scales]);
+    }, [scale, scales, setScale]);
 
     return (
         <Settings>
@@ -96,37 +95,12 @@ const Panel = ({ scale, scales, setScale }: Props) => {
                                 key={s.id}
                                 onClick={() => setScale(s)}
                             >
-                                {s.id === scale.id && <span>-></span>} {s.name}
+                                {s.id === scale.id && <span>-&gt;</span>}{' '}
+                                {s.name}
                             </li>
                         );
                     })}
                 </ul>
-                {/* <button
-                    className="downshift-button"
-                    {...getToggleButtonProps()}
-                >
-                    {selectedItem && selectedItem.name
-                        ? selectedItem.name
-                        : 'Choose a scale'}
-                </button>
-                <ul className="item-list" {...getMenuProps()}>
-                    {isOpen &&
-                        items.map((item, index) => (
-                            <li
-                                style={
-                                    highlightedIndex === index
-                                        ? { backgroundColor: '#bde4ff' }
-                                        : {}
-                                }
-                                key={`${item}${index}`}
-                                {...getItemProps({ item, index })}
-                            >
-                                {item.name}
-                            </li>
-                        ))}
-                </ul> */}
-                {/* if you Tab from menu, focus goes on button, and it shouldn't. only happens here. */}
-                {/* <div tabIndex={0} /> */}
             </div>
             <div className="knob" onClick={handleIncrementScale} />
         </Settings>
