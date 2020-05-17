@@ -4,16 +4,13 @@ import panel from './img/panel.png';
 import knob from './img/knob.png';
 import knobHover from './img/knob-hover.png';
 import { useSelect } from 'downshift';
+import { Scale } from './App';
 
-type Props = {
-    scale: any;
-    setScale: any;
-};
-
-type Item = {
-    name: string;
-    notes: number[];
-};
+interface Props {
+    scale: Scale;
+    scales: Array<Scale>;
+    setScale: (s: Scale) => void;
+}
 
 const Settings = styled.div`
     display: flex;
@@ -52,17 +49,8 @@ const Settings = styled.div`
     }
 `;
 
-const Panel = ({ scale, setScale }: Props) => {
-    const items: Item[] = [
-        { name: 'locrian', notes: [0, 0, 0, 0, 0, 0] },
-        { name: 'phrygian', notes: [0, 0, 0, 1, 0, 0] },
-        { name: 'aeolian a.k.a. natural minor', notes: [1, 0, 0, 1, 0, 0] },
-        { name: 'dorian', notes: [1, 0, 0, 1, 1, 0] },
-        { name: 'myxolydian', notes: [1, 1, 0, 1, 1, 0] },
-        { name: 'ionian a.k.a. Major', notes: [1, 1, 0, 1, 1, 1] },
-        { name: 'lydian', notes: [1, 1, 1, 1, 1, 1] },
-    ];
-
+const Panel = ({ scale, scales, setScale }: Props) => {
+    const items = scales;
     const itemToString = React.useCallback((item) => {
         if (item && item.name) {
             return item.name;
@@ -72,9 +60,9 @@ const Panel = ({ scale, setScale }: Props) => {
     }, []);
 
     const onSelectedItemChange = React.useCallback(
-        (changes: any) => {
-            console.log(changes.selectedItem);
-            setScale([...changes.selectedItem.notes]);
+        // (changes: { selectedItem: Scale | undefined | null }) => {
+        (changes) => {
+            if (changes.selectedItem) setScale(changes.selectedItem);
         },
         [setScale],
     );
@@ -83,7 +71,6 @@ const Panel = ({ scale, setScale }: Props) => {
         isOpen,
         selectedItem,
         getToggleButtonProps,
-        getLabelProps,
         getMenuProps,
         highlightedIndex,
         getItemProps,

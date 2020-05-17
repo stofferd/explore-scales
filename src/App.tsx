@@ -5,6 +5,13 @@ import Pad from './Pad';
 import Panel from './Panel';
 import Backing from './Backing';
 
+export type Scale = {
+    id: string;
+    name: string;
+    desc?: string;
+    notes: number[];
+};
+
 const Instrument = styled.div`
     background: linear-gradient(#181818, #303030);
     border-radius: 1rem;
@@ -62,7 +69,24 @@ const Instrument = styled.div`
 `;
 
 function App() {
-    const [scale, setScale] = React.useState([1, 1, 0, 1, 1, 1]);
+    const scales: Scale[] = [
+        { id: 'locrian', name: 'locrian', notes: [0, 0, 0, 0, 0, 0] },
+        { id: 'phrygian', name: 'phrygian', notes: [0, 0, 0, 1, 0, 0] },
+        {
+            id: 'aeolian',
+            name: 'aeolian a.k.a. natural minor',
+            notes: [1, 0, 0, 1, 0, 0],
+        },
+        { id: 'dorian', name: 'dorian', notes: [1, 0, 0, 1, 1, 0] },
+        { id: 'myxolydian', name: 'myxolydian', notes: [1, 1, 0, 1, 1, 0] },
+        {
+            id: 'ionian',
+            name: 'ionian a.k.a. Major',
+            notes: [1, 1, 0, 1, 1, 1],
+        },
+        { id: 'lydian', name: 'lydian', notes: [1, 1, 1, 1, 1, 1] },
+    ];
+    const [scale, setScale] = React.useState(scales[0]);
 
     const cnote = React.useRef(null);
     const cshnote = React.useRef(null);
@@ -77,117 +101,6 @@ function App() {
     const ashnote = React.useRef(null);
     const bnote = React.useRef(null);
     const c2note = React.useRef(null);
-    const cdrone = React.useRef(null);
-
-    console.log({ scale });
-
-    const pads = [
-        {
-            keys: ['a', '1'],
-            notes: [
-                {
-                    url: require('./audio/c.wav'),
-                    ref: cnote,
-                },
-            ],
-            value: 0,
-        },
-        {
-            keys: ['s', '2'],
-            notes: [
-                {
-                    url: require('./audio/c+.wav'),
-                    ref: cshnote,
-                },
-                {
-                    url: require('./audio/d.wav'),
-                    ref: dnote,
-                },
-            ],
-            value: scale[0],
-        },
-        {
-            keys: ['d', '3'],
-            notes: [
-                {
-                    url: require('./audio/d+.wav'),
-                    ref: dshnote,
-                },
-                {
-                    url: require('./audio/e.wav'),
-                    ref: enote,
-                },
-            ],
-            value: scale[1],
-        },
-        {
-            keys: ['f', '4'],
-            notes: [
-                {
-                    url: require('./audio/f.wav'),
-                    ref: fnote,
-                },
-                {
-                    url: require('./audio/f+.wav'),
-                    ref: fshnote,
-                },
-            ],
-            value: scale[2],
-        },
-        {
-            keys: ['g', '5'],
-            notes: [
-                {
-                    url: require('./audio/f+.wav'),
-                    ref: fshnote,
-                },
-                {
-                    url: require('./audio/g.wav'),
-                    ref: gnote,
-                },
-            ],
-            value: scale[3],
-        },
-        {
-            keys: ['h', '6'],
-            notes: [
-                {
-                    url: require('./audio/g+.wav'),
-                    ref: gshnote,
-                },
-                {
-                    url: require('./audio/a.wav'),
-                    ref: anote,
-                },
-            ],
-            value: scale[4],
-        },
-        {
-            keys: ['j', '7'],
-            notes: [
-                {
-                    url: require('./audio/a+.wav'),
-                    ref: ashnote,
-                },
-                {
-                    url: require('./audio/b.wav'),
-                    ref: bnote,
-                },
-            ],
-            value: scale[5],
-        },
-
-        {
-            keys: ['k', '8'],
-            notes: [
-                {
-                    url: require('./audio/c2.wav'),
-                    ref: c2note,
-                },
-            ],
-            value: 0,
-        },
-    ];
 
     return (
         <div className="App">
@@ -201,7 +114,11 @@ function App() {
                             <h4 className="title--med">Scale</h4>
                             <hr className="divider" />
                         </div>
-                        <Panel scale={scale} setScale={setScale} />
+                        <Panel
+                            scales={scales}
+                            scale={scale}
+                            setScale={setScale}
+                        />
                     </div>
                     <div className="settings--backing">
                         <div className="flex">
@@ -209,38 +126,129 @@ function App() {
                             <hr className="divider" />
                         </div>
 
-                        <Backing
-                            tracks={[
-                                {
-                                    url: require('./audio/cdrone.mp3'),
-                                    ref: cdrone,
-                                },
-                                {
-                                    url: require('./audio/c_maj_chords.wav'),
-                                    ref: cdrone,
-                                },
-                                {
-                                    url: require('./audio/cdrone.mp3'),
-                                    ref: cdrone,
-                                },
-                            ]}
-                        />
+                        <Backing scale={scale} />
                     </div>
                     <div /> <div />
                 </div>
                 <div className="notes">
-                    {pads.map((pad, i) => {
-                        return (
-                            <Pad
-                                key={i}
-                                number={i + 1}
-                                keys={pad.keys}
-                                notes={pad.notes}
-                                value={pad.value}
-                                onChange={setScale}
-                            />
-                        );
-                    })}
+                    <Pad
+                        number={1}
+                        keys={['a', '1']}
+                        notes={[
+                            {
+                                url: require('./audio/c.wav'),
+                                ref: cnote,
+                            },
+                        ]}
+                        onChange={setScale}
+                        value={0}
+                    />
+
+                    <Pad
+                        number={2}
+                        keys={['s', '2']}
+                        notes={[
+                            {
+                                url: require('./audio/c+.wav'),
+                                ref: cshnote,
+                            },
+                            {
+                                url: require('./audio/d.wav'),
+                                ref: dnote,
+                            },
+                        ]}
+                        onChange={setScale}
+                        value={scale.notes[0]}
+                    />
+
+                    <Pad
+                        number={3}
+                        keys={['d', '3']}
+                        notes={[
+                            {
+                                url: require('./audio/d+.wav'),
+                                ref: dshnote,
+                            },
+                            {
+                                url: require('./audio/e.wav'),
+                                ref: enote,
+                            },
+                        ]}
+                        value={scale.notes[1]}
+                    />
+                    <Pad
+                        number={4}
+                        keys={['f', '4']}
+                        notes={[
+                            {
+                                url: require('./audio/f.wav'),
+                                ref: fnote,
+                            },
+                            {
+                                url: require('./audio/f+.wav'),
+                                ref: fshnote,
+                            },
+                        ]}
+                        value={scale.notes[2]}
+                    />
+                    <Pad
+                        number={5}
+                        keys={['g', '5']}
+                        notes={[
+                            {
+                                url: require('./audio/f+.wav'),
+                                ref: fshnote,
+                            },
+                            {
+                                url: require('./audio/g.wav'),
+                                ref: gnote,
+                            },
+                        ]}
+                        value={scale.notes[3]}
+                    />
+                    <Pad
+                        number={6}
+                        keys={['h', '6']}
+                        notes={[
+                            {
+                                url: require('./audio/g+.wav'),
+                                ref: gshnote,
+                            },
+                            {
+                                url: require('./audio/a.wav'),
+                                ref: anote,
+                            },
+                        ]}
+                        value={scale.notes[4]}
+                    />
+                    <Pad
+                        number={7}
+                        keys={['j', '7']}
+                        notes={[
+                            {
+                                url: require('./audio/a+.wav'),
+                                ref: ashnote,
+                            },
+                            {
+                                url: require('./audio/b.wav'),
+                                ref: bnote,
+                            },
+                        ]}
+                        value={scale.notes[5]}
+                    />
+
+                    <Pad
+                        number={8}
+                        keys={['k', '8']}
+                        notes={[
+                            {
+                                url: require('./audio/c2.wav'),
+                                ref: c2note,
+                            },
+                        ]}
+                        onChange={setScale}
+                        value={0}
+                    />
                 </div>
             </Instrument>
         </div>

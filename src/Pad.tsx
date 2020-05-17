@@ -8,17 +8,18 @@ import classNames from 'classnames';
 // return React.useRef<HTMLInputElement | null>(null);
 
 export type Audio = {
+    name?: string;
     url: any;
     ref: any;
 };
 
-type Props = {
+interface Props {
     keys: string[];
     notes: Audio[];
     number: number;
     value: number;
-    onChange?: (v: number[]) => void;
-};
+    onChange?: (v: any) => void;
+}
 
 const MusicPad = styled.div`
     background-image: url(${padLargeBacking});

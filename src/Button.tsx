@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import btnOff from './img/btn-off.png';
 import btnOffHover from './img/btn-off-hover.png';
 
-type Props = {
+interface Props {
     className?: string;
     onClick: (v: any) => void;
     title?: string;
-};
+}
 
 const Btn = styled.button`
     display: block;
