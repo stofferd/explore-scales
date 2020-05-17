@@ -131,7 +131,9 @@ const Backing = ({ scale }: Props) => {
         return () => {};
     }, [scale]);
 
-    const options = ['off', 'drone', 'track 1', 'track 2'];
+    // const options = ['off', 'drone', 'track 1', 'track 2'];
+    const options = ['off', 'drone', 'track 1'];
+
     return (
         <BackingBtns>
             {options.map((opt: string, i: number) => {

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import panel from './img/panel.png';
 import knob from './img/knob.png';
 import knobHover from './img/knob-hover.png';
-import { useSelect } from 'downshift';
+// import { useSelect } from 'downshift';
 import { Scale } from './App';
 
 interface Props {
@@ -20,9 +20,10 @@ const Settings = styled.div`
         background-color: transparent;
         background-size: contain;
         border: 0;
-        width: 40rem;
-        height: 8.5rem;
+        width: 65rem;
+        height: 5.4rem;
         cursor: pointer;
+        position: relative;
     }
     .knob {
         background-image: url(${knob});
@@ -47,68 +48,87 @@ const Settings = styled.div`
         cursor: pointer;
         text-transform: uppercase;
     }
+    .current-scale {
+        text-transform: uppercase;
+        padding: 0.2rem 1rem;
+    }
+    .scale-list {
+        overflow: scroll;
+        height: 3rem;
+        padding: 0 1rem;
+        margin: 0 1rem;
+        border-left: 2px dashed #fff;
+        li {
+            list-style-type: none;
+            padding: 0.5rem 0;
+            &:hover {
+                background: rgba(0, 0, 0, 0.5);
+            }
+        }
+    }
 `;
 
 const Panel = ({ scale, scales, setScale }: Props) => {
-    const items = scales;
-    const itemToString = React.useCallback((item) => {
-        if (item && item.name) {
-            return item.name;
+    const handleIncrementScale = React.useCallback(() => {
+        console.log({ scaleid: scale.id });
+        console.log(scales.length);
+
+        const i = scales.findIndex((s) => {
+            return s.id === scale.id;
+        });
+        if (i + 1 === scales.length) {
+            setScale(scales[0]);
         } else {
-            return '';
+            setScale(scales[i + 1]);
         }
-    }, []);
-
-    const onSelectedItemChange = React.useCallback(
-        // (changes: { selectedItem: Scale | undefined | null }) => {
-        (changes) => {
-            if (changes.selectedItem) setScale(changes.selectedItem);
-        },
-        [setScale],
-    );
-
-    const {
-        isOpen,
-        selectedItem,
-        getToggleButtonProps,
-        getMenuProps,
-        highlightedIndex,
-        getItemProps,
-    } = useSelect({ items, itemToString, onSelectedItemChange });
+        console.log({ i });
+    }, [scale, scales]);
 
     return (
         <Settings>
             <div className="panel">
-                <div>
-                    <button
-                        className="downshift-button"
-                        {...getToggleButtonProps()}
-                    >
-                        {selectedItem && selectedItem.name
-                            ? selectedItem.name
-                            : 'Choose a scale'}
-                    </button>
-                    <ul {...getMenuProps()}>
-                        {isOpen &&
-                            items.map((item, index) => (
-                                <li
-                                    style={
-                                        highlightedIndex === index
-                                            ? { backgroundColor: '#bde4ff' }
-                                            : {}
-                                    }
-                                    key={`${item}${index}`}
-                                    {...getItemProps({ item, index })}
-                                >
-                                    {item.name}
-                                </li>
-                            ))}
-                    </ul>
-                    {/* if you Tab from menu, focus goes on button, and it shouldn't. only happens here. */}
-                    <div tabIndex={0} />
-                </div>
+                <div className="current-scale">{scale.name}</div>
+                <ul className="scale-list">
+                    {scales.map((s: Scale) => {
+                        return (
+                            <li
+                                className="scale"
+                                key={s.id}
+                                onClick={() => setScale(s)}
+                            >
+                                {s.id === scale.id && <span>-></span>} {s.name}
+                            </li>
+                        );
+                    })}
+                </ul>
+                {/* <button
+                    className="downshift-button"
+                    {...getToggleButtonProps()}
+                >
+                    {selectedItem && selectedItem.name
+                        ? selectedItem.name
+                        : 'Choose a scale'}
+                </button>
+                <ul className="item-list" {...getMenuProps()}>
+                    {isOpen &&
+                        items.map((item, index) => (
+                            <li
+                                style={
+                                    highlightedIndex === index
+                                        ? { backgroundColor: '#bde4ff' }
+                                        : {}
+                                }
+                                key={`${item}${index}`}
+                                {...getItemProps({ item, index })}
+                            >
+                                {item.name}
+                            </li>
+                        ))}
+                </ul> */}
+                {/* if you Tab from menu, focus goes on button, and it shouldn't. only happens here. */}
+                {/* <div tabIndex={0} /> */}
             </div>
-            <div className="knob" />
+            <div className="knob" onClick={handleIncrementScale} />
         </Settings>
     );
 };

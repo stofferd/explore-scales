@@ -15,11 +15,33 @@ export type Audio = {
 
 interface Props {
     keys: string[];
+    high?: string;
+    low?: string;
     notes: Audio[];
     number: number;
     value: number;
     onChange?: (v: any) => void;
 }
+
+const Note = styled.div`
+    align-items: center;
+    .high,
+    .low {
+        text-transform: uppercase;
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 1rem 0;
+        position: absolute;
+        width: 100%;
+        text-align: center;
+    }
+    .high {
+        top: -2.8rem;
+    }
+    .low {
+        bottom: -2.5rem;
+    }
+`;
 
 const MusicPad = styled.div`
     background-image: url(${padLargeBacking});
@@ -90,7 +112,22 @@ const MusicPad = styled.div`
     }
 `;
 
-const Pad = ({ keys, notes, value, onChange = () => {}, number }: Props) => {
+const Number = styled.div`
+    font-weight: 900;
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 2vw;
+`;
+
+const Pad = ({
+    keys,
+    notes,
+    value,
+    onChange = () => {},
+    number,
+    high,
+    low,
+}: Props) => {
     const padRef = React.useRef<HTMLInputElement | null>(null);
 
     const play = React.useCallback(
@@ -117,11 +154,12 @@ const Pad = ({ keys, notes, value, onChange = () => {}, number }: Props) => {
     }, [play]); //initial mount
 
     return (
-        <div className={'note note--' + number}>
+        <Note className={'note note--' + number}>
             <MusicPad
                 className={notes.length > 1 ? 'pad' : 'small-pad'}
                 onClick={(e) => play(e)}
             >
+                {high && <div className="high">{high}</div>}
                 <div
                     className={classNames(
                         notes.length > 1 ? 'large-pad-button' : 'pad-button',
@@ -129,13 +167,14 @@ const Pad = ({ keys, notes, value, onChange = () => {}, number }: Props) => {
                     )}
                     ref={padRef}
                 ></div>
-
                 {notes.map((note, i) => {
                     return <audio key={i} ref={note.ref} src={note.url} />;
                 })}
+                {low && <div className="low">{low}</div>}
             </MusicPad>
-            <div className="number">{number}</div>
-        </div>
+
+            <Number>{number}</Number>
+        </Note>
     );
 };
 

@@ -34,6 +34,7 @@ const Instrument = styled.div`
         display: grid;
         grid-template-columns: repeat(8, 1fr);
         align-items: center;
+        margin: 6rem 0 2rem;
     }
     .note {
         display: flex;
@@ -159,6 +160,8 @@ function App() {
                         ]}
                         onChange={setScale}
                         value={scale.notes[0]}
+                        high="major"
+                        low="minor"
                     />
 
                     <Pad
@@ -175,6 +178,8 @@ function App() {
                             },
                         ]}
                         value={scale.notes[1]}
+                        high="major"
+                        low="minor"
                     />
                     <Pad
                         number={4}
@@ -190,6 +195,8 @@ function App() {
                             },
                         ]}
                         value={scale.notes[2]}
+                        high="augmented"
+                        low="perfect"
                     />
                     <Pad
                         number={5}
@@ -205,6 +212,8 @@ function App() {
                             },
                         ]}
                         value={scale.notes[3]}
+                        high="perfect"
+                        low="diminished"
                     />
                     <Pad
                         number={6}
@@ -220,6 +229,8 @@ function App() {
                             },
                         ]}
                         value={scale.notes[4]}
+                        high="major"
+                        low="minor"
                     />
                     <Pad
                         number={7}
@@ -235,6 +246,8 @@ function App() {
                             },
                         ]}
                         value={scale.notes[5]}
+                        high="major"
+                        low="minor"
                     />
 
                     <Pad
